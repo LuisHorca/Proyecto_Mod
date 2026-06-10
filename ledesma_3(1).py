@@ -37,6 +37,7 @@ def agrupar_genero(genero):
         return "urbana"
     else:
         return "otro"
+      
 df["categoría"] = df["track_genre"].apply(agrupar_genero)
 print("\nCantidad de canciones por genero:")
 print(df["categoría"].value_counts())
@@ -47,15 +48,9 @@ print(df.shape)
 print("\nGeneros finales:")
 print(df["categoría"].value_counts())
 
-X=df[["popularity","duration_ms","danceability","energy","loudness","speechiness",
-      "acousticness","instrumentalness","liveness","valence","tempo"]]
+X=df[["popularity","duration_ms","danceability","energy","loudness","speechiness","acousticness","instrumentalness","liveness","valence","tempo"]]
 y=df["categoría"]
-X_train, X_test, y_train, y_test = train_test_split(
-    X,
-    y,
-    test_size=0.2,
-    random_state=42
-)
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
 print("Datos de entrenamiento: ", X_train.shape)
 print("Datos de prueba:", X_test.shape)
 
@@ -77,11 +72,7 @@ print(precisión_lr)
 print("\nReporte Regresión Logística:")
 print(classification_report(y_test, predicción_lr))
 
-modelo_rf = RandomForestClassifier(
-    n_estimators=100,
-    random_state=42,
-    max_depth=20
-)
+modelo_rf = RandomForestClassifier(n_estimators=100,random_state=42,max_depth=20)
 modelo_rf.fit(X_train, y_train)
 predicción_rf = modelo_rf.predict(X_test)
 precisión_rf = accuracy_score(y_test, predicción_rf)
@@ -133,18 +124,13 @@ for i, fila in df_radio.iterrows():
         horario = "Tarde"
     elif energía >= 0.70 or baile >= 0.70:
         horario = "Noche"
-    programación.append(
-        [horario,nombre,artista,categoría,popularidad,energía,baile,valencia]
-    )
+    programación.append([horario,nombre,artista,categoría,popularidad,energía,baile,valencia])
     canciones_usadas.append(nombre)
     último_artista = artista
     última_categoría = categoría
     if len(programación) == 360:
         break
-programacionDeRadio = pd.DataFrame(
-    programación,
-    columns=[ "horario","cancion","artista","categoría","popularidad","energia","danceability","valence"]
-)
+programacionDeRadio = pd.DataFrame(programación,columns=[ "horario","cancion","artista","categoría","popularidad","energia","danceability","valence"])
 print("\nProgramacion generada para la radio:")
 print(programacionDeRadio)
 print("\nCanciones para la mañana:")
