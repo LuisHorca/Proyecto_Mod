@@ -43,7 +43,6 @@ print("\nCantidad de canciones por genero:")
 print(df["categoría"].value_counts())
 
 df = df[df["categoría"] != "otro"]
-print("\nDataset despues de quitar la categoría de otro:")
 print(df.shape)
 print("\nGeneros finales:")
 print(df["categoría"].value_counts())
