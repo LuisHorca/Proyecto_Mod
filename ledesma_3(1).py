@@ -22,7 +22,8 @@ df=df[df["popularity"]!=0]
 print(df.head(10))
 print(df.info())
 
-def agrupar_genero(genero):
+#Aqui defininimos la función en la cual se agrupan los 114 generos del dataset en los 7 generos simplificados creados
+def agrupar_porgenero(genero):
     if genero in ["pop", "dance", "disco", "power-pop", "cantopop", "indie-pop", "k-pop", "power-pop"]:
         return "pop_comercial"
     elif genero in ["rock", "alt-rock", "punk", "hard-rock", "metal", "bluegrass", "j-rock", "punk-rock", "rock-n-roll"]:
@@ -38,7 +39,7 @@ def agrupar_genero(genero):
     else:
         return "otro"
       
-df["Genero"] = df["track_genre"].apply(agrupar_genero)
+df["Genero"] = df["track_genre"].apply(agrupar_porgenero)
 print("\nCantidad de canciones por genero:")
 print(df["Genero"].value_counts())
 
@@ -47,19 +48,20 @@ print(df.shape)
 print("\nClasificacíon final de generos:")
 print(df["Genero"].value_counts())
 
-X=df[["popularity","duration_ms","danceability","energy","loudness","speechiness","acousticness","instrumentalness","liveness","valence","tempo"]]
+x=df[["popularity","duration_ms","danceability","energy","loudness","speechiness","acousticness","instrumentalness","liveness","valence","tempo"]]
 y=df["Genero"]
-X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
+x_entren, x_prueba, y_entren, y_prueba = train_test_split(x,y,test_size=0.25,random_state=42)
 print("Datos de entrenamiento: ", X_train.shape)
 print("Datos de prueba:", X_test.shape)
 
-modelo_nb = GaussianNB()
-modelo_nb.fit(X_train, y_train)
-predicción_nb = modelo_nb.predict(X_test)
-precisión_nb = accuracy_score(y_test, predicción_nb)
-print("\nPrecisión Naive Bayes:")
-print(precisión_nb)
-print("\nReporte Naive Bayes:")
+Naive_Bayes = GaussianNB()
+Naive_Bayes.fit(x_entren, y_entren)
+predicción_Naive = Naive_Bayes.predict(x_prueba)
+precisión_Naive = accuracy_score(y_prueba, predicción_Naive)
+print("Resultado de precisión de Naive-Bayes")
+print(precisión_Naive)
+print("\n")
+print("Reporte de modelo Naive-Bayes:")
 print(classification_report(y_test, predicción_nb))
 
 modelo_lr = LogisticRegression(max_iter=1000)
