@@ -53,8 +53,8 @@ print(df["Genero"].value_counts())
 x=df[["popularity","duration_ms","danceability","energy","loudness","speechiness","acousticness","instrumentalness","liveness","valence","tempo"]]
 y=df["Genero"]
 x_entren, x_prueba, y_entren, y_prueba = train_test_split(x,y,test_size=0.25,random_state=42)
-print("Datos de entrenamiento: ", X_train.shape)
-print("Datos de prueba:", X_test.shape)
+print("Datos de entrenamiento: ", x_entren.shape)
+print("Datos de prueba:", x_prueba.shape)
 
 Naive_Bayes = GaussianNB()
 Naive_Bayes.fit(x_entren, y_entren)
@@ -64,7 +64,7 @@ print("Resultado de precisión de Naive-Bayes")
 print(precisión_Naive)
 print("\n")
 print("Reporte de modelo Naive-Bayes:")
-print(classification_report(y_test, predicción_nb))
+print(classification_report(y_prueba, predicción_Naive))
 
 modelo_logistica = LogisticRegression(max_iter=1000)
 modelo_logistica.fit(x_entren, y_entren)
@@ -88,11 +88,11 @@ print("Reporte del modelo Random Forest:")
 print(classification_report(y_prueba, predicción_RandomForest))
 print("\n")
 print("Comparación de modelos:")
-print("Naive Bayes:", precisión_nb)
-print("Regresión Logística:", precisión_lr)
-print("Random Forest:", precisión_rf)
+print("Naive Bayes:", precisión_Naive)
+print("Regresión Logística:", precisión_logistica)
+print("Random Forest:", precisión_RandomForest)
 
-mejorModelo = modelo_rf
+mejorModelo = modelo_RandomForest
 mejorNombre = "Random Forest"
 if precisión_Naive > precisión_RandomForest and precisión_Naive > precisión_logistica:
     mejorModelo = modelo_Naive
@@ -102,8 +102,9 @@ if precisión_logistica > precisión_RandomForest and precisión_logistica > pre
     mejorNombre = "Regresion Logistica"
     
 print("Mejor modelo (modelo seleccionado):")
-print(mejor_nombre)
-df["predicción_modelo"] = mejor_modelo.predict(X)
+print(mejorNombre)
+print("\n")
+df["predicción_modelo"] = mejorModelo.predict(X)
 print("Ejemplo de canciones con prediccion:")
 print(df[["track_name", "artists", "track_genre", "categoría", "predicción_modelo"]].head(20))
 
