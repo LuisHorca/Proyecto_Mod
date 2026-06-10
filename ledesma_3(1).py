@@ -40,12 +40,14 @@ def agrupar_porgenero(genero):
         return "otro"
       
 df["Genero"] = df["track_genre"].apply(agrupar_porgenero)
-print("\nCantidad de canciones por genero:")
+print("Cantidad de canciones por genero:")
+print("\n")
 print(df["Genero"].value_counts())
 
 df = df[df["Genero"] != "otro"]
 print(df.shape)
-print("\nClasificacíon final de generos:")
+print("Clasificacíon final de generos:")
+print("\n")
 print(df["Genero"].value_counts())
 
 x=df[["popularity","duration_ms","danceability","energy","loudness","speechiness","acousticness","instrumentalness","liveness","valence","tempo"]]
@@ -64,14 +66,16 @@ print("\n")
 print("Reporte de modelo Naive-Bayes:")
 print(classification_report(y_test, predicción_nb))
 
-modelo_lr = LogisticRegression(max_iter=1000)
-modelo_lr.fit(X_train, y_train)
-predicción_lr = modelo_lr.predict(X_test)
-precisión_lr = accuracy_score(y_test, predicción_lr)
-print("\nPrecisión Regresión Logística:")
+modelo_logistica = LogisticRegression(max_iter=1000)
+modelo_logistica.fit(x_entren, y_entren)
+predicción_logistica = modelo_logistico.predict(x_prueba)
+precisión_logistica = accuracy_score(y_prueba, predicción_logistica)
+print("Resultado de precisión del modelo de Regresión Logística:")
 print(precisión_lr)
-print("\nReporte Regresión Logística:")
-print(classification_report(y_test, predicción_lr))
+print("\n")
+print("Reporte Regresión Logística:")
+print(classification_report(y_prueba, predicción_logistica))
+print("\n")
 
 modelo_rf = RandomForestClassifier(n_estimators=100,random_state=42,max_depth=20)
 modelo_rf.fit(X_train, y_train)
