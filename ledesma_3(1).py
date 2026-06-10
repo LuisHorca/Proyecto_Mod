@@ -71,37 +71,40 @@ modelo_logistica.fit(x_entren, y_entren)
 predicción_logistica = modelo_logistico.predict(x_prueba)
 precisión_logistica = accuracy_score(y_prueba, predicción_logistica)
 print("Resultado de precisión del modelo de Regresión Logística:")
-print(precisión_lr)
+print(precisión_logistica)
 print("\n")
-print("Reporte Regresión Logística:")
+print("Reporte de modelo Regresión Logística:")
 print(classification_report(y_prueba, predicción_logistica))
 print("\n")
 
-modelo_rf = RandomForestClassifier(n_estimators=100,random_state=42,max_depth=20)
-modelo_rf.fit(X_train, y_train)
-predicción_rf = modelo_rf.predict(X_test)
-precisión_rf = accuracy_score(y_test, predicción_rf)
-print("\nPrecisión del Random Forest:")
-print(precisión_rf)
-print("\nReporte Random Forest:")
-print(classification_report(y_test, predicción_rf))
-print("\nComparación general:")
+RandomForest = RandomForestClassifier(n_estimators=100,random_state=42,max_depth=20)
+RandomForest.fit(x_entren, y_entren)
+predicción_RandomForest = modelo_rf.predict(x_prueba)
+precisión_RandomForest = accuracy_score(y_prueba, predicción_RandomForest)
+print("Precisión del Random Forest:")
+print(precisión_RandomForest)
+print("\n")
+print("Reporte del modelo Random Forest:")
+print(classification_report(y_prueba, predicción_RandomForest))
+print("\n")
+print("Comparación de modelos:")
 print("Naive Bayes:", precisión_nb)
 print("Regresión Logística:", precisión_lr)
 print("Random Forest:", precisión_rf)
 
-mejor_modelo = modelo_rf
-mejor_nombre = "Random Forest"
-if precisión_nb > precisión_rf and precisión_nb > precisión_lr:
-    mejor_modelo = modelo_nb
-    mejor_nombre = "Naive Bayes"
-if precisión_lr > precisión_rf and precisión_lr > precisión_nb:
-    mejor_modelo = modelo_lr
-    mejor_nombre = "Regresion Logistica"
-print("\nMejor modelo:")
+mejorModelo = modelo_rf
+mejorNombre = "Random Forest"
+if precisión_Naive > precisión_RandomForest and precisión_Naive > precisión_logistica:
+    mejorModelo = modelo_Naive
+    mejorNombre = "Naive Bayes"
+if precisión_logistica > precisión_RandomForest and precisión_logistica > precisión_Naive:
+    mejorModelo = modelo_logistica
+    mejorNombre = "Regresion Logistica"
+    
+print("Mejor modelo (modelo seleccionado):")
 print(mejor_nombre)
 df["predicción_modelo"] = mejor_modelo.predict(X)
-print("\nEjemplo de canciones con prediccion:")
+print("Ejemplo de canciones con prediccion:")
 print(df[["track_name", "artists", "track_genre", "categoría", "predicción_modelo"]].head(20))
 
 df_radio = df.sample(700, random_state=10)
