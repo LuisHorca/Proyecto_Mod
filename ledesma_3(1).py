@@ -38,17 +38,17 @@ def agrupar_genero(genero):
     else:
         return "otro"
       
-df["categoría"] = df["track_genre"].apply(agrupar_genero)
+df["Genero"] = df["track_genre"].apply(agrupar_genero)
 print("\nCantidad de canciones por genero:")
-print(df["categoría"].value_counts())
+print(df["Genero"].value_counts())
 
-df = df[df["categoría"] != "otro"]
+df = df[df["Genero"] != "otro"]
 print(df.shape)
-print("\nGeneros finales:")
-print(df["categoría"].value_counts())
+print("\nClasificacíon final de generos:")
+print(df["Genero"].value_counts())
 
 X=df[["popularity","duration_ms","danceability","energy","loudness","speechiness","acousticness","instrumentalness","liveness","valence","tempo"]]
-y=df["categoría"]
+y=df["Genero"]
 X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
 print("Datos de entrenamiento: ", X_train.shape)
 print("Datos de prueba:", X_test.shape)
