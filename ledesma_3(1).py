@@ -38,7 +38,7 @@ def agrupar_genero(genero):
     else:
         return "otro"
 df["categoría"] = df["track_genre"].apply(agrupar_genero)
-print("\nCantidad por categoría:")
+print("\nCantidad de canciones por genero:")
 print(df["categoría"].value_counts())
 
 df = df[df["categoría"] != "otro"]
