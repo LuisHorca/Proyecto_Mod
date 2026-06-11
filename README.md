@@ -8,9 +8,9 @@ Para esto, se utilizó un dataset de canciones con información musical como pop
 
 ## Integrantes
 
-- Regina Franco Gutierrez - A01352605
-- Ezra Daniel Ruiz Arredondo - A01661151
-- Luis López Horcasitas - A01713551
+- Regina Franco - A01352605
+- Ezra Daniel Ruiz - A01661151
+- Luis López - A01713551
 
 ## Objetivo
 
