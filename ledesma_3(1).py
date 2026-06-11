@@ -88,7 +88,7 @@ RandomForest = RandomForestClassifier(n_estimators=100,random_state=1,max_depth=
 #Finalmente, entrenamos un modelo de random forest con 100 árboles de decisión, una profundidad máxima de cada árbol de 20 nodos,
 #ya que es un valor intermedio y evita el overfitting. El random state simplemente lo fijamos a 1 para asegurar que los resultados no cambien.
 RandomForest.fit(x_entren, y_entren)
-predicción_RandomForest = modelo_rf.predict(x_prueba)
+predicción_RandomForest = RandomForest.predict(x_prueba)
 precisión_RandomForest = accuracy_score(y_prueba, predicción_RandomForest)
 print("Precisión del Random Forest:")
 print(precisión_RandomForest)
