@@ -215,46 +215,6 @@ positividad
 
 El archivo permite revisar la programación generada y abrirla posteriormente en Excel o en otra herramienta de análisis de datos.
 
-## Estructura del proyecto
-
-La estructura del repositorio puede organizarse de la siguiente forma:
-
-```text
-proyecto-radio-ml/
-│
-├── main.py
-├── programación_radio.csv
-├── requirements.txt
-├── README.md
-└── DU-IAG.pdf
-```
-
-El archivo `programación_radio.csv` se genera automáticamente después de ejecutar el programa.
-
-## Dependencias
-
-Para ejecutar el proyecto se necesitan las siguientes librerías:
-
-```text
-kagglehub
-pandas
-numpy
-scikit-learn
-matplotlib
-seaborn
-```
-
-El archivo `requirements.txt` debe contener:
-
-```text
-kagglehub
-pandas
-numpy
-scikit-learn
-matplotlib
-seaborn
-```
-
 ## Instrucciones de ejecución
 
 Primero, se deben instalar las dependencias:
@@ -266,7 +226,7 @@ pip install -r requirements.txt
 Después, se ejecuta el archivo principal:
 
 ```bash
-python main.py
+python Proyecto_ModIA.py
 ```
 
 Al finalizar, el programa mostrará en consola la información general del dataset, la cantidad de canciones por categoría, los resultados de cada modelo, la comparación general de precisión y una muestra de la programación generada para la radio.
@@ -283,32 +243,24 @@ El resultado esperado es obtener un modelo capaz de clasificar canciones en cate
 
 ## Aporte del proyecto
 
-El aporte principal del proyecto no está solamente en entrenar un modelo de clasificación, sino en conectar ese modelo con una necesidad práctica. En este caso, el sistema ayuda a organizar canciones para una estación de radio, tomando en cuenta criterios musicales y reglas básicas de programación.
-
-De esta forma, el proyecto muestra cómo Machine Learning puede funcionar como una herramienta de apoyo para tomar decisiones más ordenadas dentro de un contexto real.
+El aporte principal del proyecto no está solamente en entrenar un modelo de clasificación, sino en conectar ese modelo con una necesidad práctica. En este caso, el sistema ayuda a organizar canciones para una estación de radio, tomando en cuenta criterios musicales y reglas básicas de programación. De esta forma, el proyecto muestra cómo Machine Learning puede funcionar como una herramienta de apoyo para tomar decisiones más ordenadas dentro de un contexto real y cotidiano.
 
 ## Limitaciones
 
-El sistema tiene algunas limitaciones. La agrupación de géneros se realizó de forma manual, por lo que podría mejorarse con más análisis musical. Asimismo, la programación generada no considera todavía datos reales de audiencia, horarios específicos de transmisión, duración total por bloque o preferencias de los locutores.
+El sistema tiene algunas limitaciones. La agrupación de géneros se realizó de forma manual, por lo que podría mejorarse con más análisis musical como la implementación de analisis de frecuencia con FFT. Asimismo, la programación generada no considera todavía datos reales de audiencia, horarios específicos de transmisión, duración total por bloque o preferencias de los locutores/oyentes.
 
-Por otro lado, las reglas de horario se basan únicamente en energía, bailabilidad y positividad, por lo que podrían ajustarse mejor si se contara con información real de la estación o de sus oyentes.
-
-No obstante, el sistema cumple con el objetivo principal: clasificar canciones y generar una programación básica, funcional y menos repetitiva.
+Por otro lado, las reglas de horario se basan únicamente en energía, bailabilidad y positividad, por lo que podrían ajustarse mejor si se contara con información real de la estación o de sus oyentes. No obstante, el sistema cumple con el objetivo principal: clasificar canciones y generar una programación básica, funcional y menos repetitiva.
 
 ## Posibles mejoras
 
 Algunas mejoras futuras serían:
 
 ```text
-Usar letras o títulos de canciones con procesamiento de texto.
 Aplicar validación cruzada.
-Optimizar hiperparámetros.
-Agregar más reglas de programación.
 Crear una interfaz para cargar canciones nuevas.
 Filtrar canciones por idioma, artista o popularidad mínima.
 Generar gráficas para explicar los resultados.
-Considerar la duración total de cada bloque horario.
-Agregar datos reales de audiencia.
+Generar muestras uniformes de canciones potenciales para cada bloque de horario
 ```
 
 ## Conclusión
