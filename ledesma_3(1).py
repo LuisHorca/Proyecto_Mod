@@ -10,9 +10,11 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report, roc_curve, auc, confusion_matrix,precision_score,  recall_score,  f1_score
 import matplotlib.pyplot as plt
 import seaborn as sns
+
 #Cargamos el dataset desde kaggle y obtenemos el path del archivo.
 path = kagglehub.dataset_download("maharshipandya/-spotify-tracks-dataset")
 print(path)
+
 #En este punto convertimos el dataset en un dataframe y revisamos las características del mismo.
 df = pd.read_csv("/kaggle/input/-spotify-tracks-dataset/dataset.csv")
 print(df.info())
@@ -22,7 +24,7 @@ df=df[df["popularity"]!=0]
 print(df.head(10))
 print(df.info())
 
-def agrupar_porgenero(genero):
+def agrupar_genero(genero):
     if genero in ["pop", "dance", "disco", "power-pop", "cantopop", "indie-pop", "k-pop", "power-pop"]:
         return "pop_comercial"
     elif genero in ["rock", "alt-rock", "punk", "hard-rock", "metal", "bluegrass", "j-rock", "punk-rock", "rock-n-roll"]:
@@ -38,87 +40,74 @@ def agrupar_porgenero(genero):
     else:
         return "otro"
 #Esta función de agrupación de géneros la creamos con el propósito de juntar los subgéneros dentro de un género paraguas.
-df["Género"] = df["track_genre"].apply(agrupar_porgenero)
+df["categoría"] = df["track_genre"].apply(agrupar_genero)
 #Creamos una nueva columna llamada categoría, la cual contiene el género paraguas de cada canción.
-print("Cantidad de canciones por género:")
-print("\n")
-print(df["Género"].value_counts())
+print("\nCantidad por género:")
+print(df["categoría"].value_counts())
 
-df = df[df["Género"] != "otro"]
+df = df[df["categoría"] != "otro"]
 #Eliminamos todos las filas que tuvieran como género paraguas otro, ya que es demasiada mezcla entre géneros no importantes para la estación de radio del abuelo.
 #También consideramos importante eliminar estos datos porque pueden presentar demasiado ruido para nuestro modelo.
-print(df.shape)
-print("Clasificación final de géneros:")
-print("\n")
-print(df["Género"].value_counts())
+print("\nDataset después de quitar la clasificación de género otro:", df.shape)
+print("\nGéneros finales:")
+print(df["categoría"].value_counts())
 
-x=df[["popularity","duration_ms","danceability","energy","loudness","speechiness","acousticness","instrumentalness","liveness","valence","tempo"]]
-y=df["Género"]
+X=df[["popularity","duration_ms","danceability","energy","loudness","speechiness",
+      "acousticness","instrumentalness","liveness","valence","tempo"]]
+y=df["categoría"]
 #Aquí seleccionamos nuestras variables predictoras y nuesta variable objetivo. Seleccionamos 11 variables para predecir el género.
-x_entren, x_prueba, y_entren, y_prueba = train_test_split(x,y,test_size=0.2,random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
+)
 #Con más de 34000 datos consideramos que una separación de 80% - 20% de los datos para entrenamiento y prueba era suficiente para el modelo.
-print("Datos de entrenamiento: ", x_entren.shape)
-print("Datos de prueba:", x_prueba.shape)
+print("Datos de entrenamiento: ", X_train.shape)
+print("Datos de prueba:", X_test.shape)
 
-Naive_Bayes = GaussianNB()
-Naive_Bayes.fit(x_entren, y_entren)
+modelo_nb = GaussianNB()
+modelo_nb.fit(X_train, y_train)
 #Primero entrenamos un modelo basado en el teorema de Naive Bayes, el cual supone que todos las variables son independientes entre sí.
-predicción_Naive = Naive_Bayes.predict(x_prueba)
-precisión_Naive = accuracy_score(y_prueba, predicción_Naive)
-print("Resultado de precisión de Naive-Bayes")
-print(precisión_Naive)
-print("\n")
-print("Reporte de modelo Naive-Bayes:")
-print(classification_report(y_prueba, predicción_Naive))
+predicción_nb = modelo_nb.predict(X_test)
+precisión_nb = accuracy_score(y_test, predicción_nb)
+print("\nPrecisión Naive Bayes:", precisión_nb)
+print("\nReporte Naive Bayes:")
+print(classification_report(y_test, predicción_nb))
 
-modelo_logistica = LogisticRegression()
-modelo_logistica.fit(x_entren, y_entren)
-#Aquí entrenamos un modelo de regresión logística, el cual mide la probabilidad de pertenecer a cada género paraguas.
+modelo_lr = LogisticRegression(max_iter=1000)
+modelo_lr.fit(X_train, y_train)
+#Aquí entrenamos un modelo lineal, el cual mide la probabilidad de pertenecer a cada género paraguas.
 #Debido a la cantidad de datos decidimos utilizar max_iter=1000 para asegurar que haya convergencia.
-predicción_logistica = modelo_logistico.predict(x_prueba)
-precisión_logistica = accuracy_score(y_prueba, predicción_logistica)
-print("Resultado de precisión del modelo de Regresión Logística:")
-print(precisión_logistica)
-print("\n")
-print("Reporte de modelo Regresión Logística:")
-print(classification_report(y_prueba, predicción_logistica))
-print("\n")
+predicción_lr = modelo_lr.predict(X_test)
+precisión_lr = accuracy_score(y_test, predicción_lr)
+print("\nPrecisión Regresión Logística:", precisión_lr)
+print("\nReporte Regresión Logística:")
+print(classification_report(y_test, predicción_lr))
 
-RandomForest = RandomForestClassifier(n_estimators=100,random_state=1,max_depth=20)
+modelo_rf = RandomForestClassifier(
+    n_estimators=100,
+    random_state=1,
+    max_depth=20
+)
 #Finalmente, entrenamos un modelo de random forest con 100 árboles de decisión, una profundidad máxima de cada árbol de 20 nodos,
 #ya que es un valor intermedio y evita el overfitting. El random state simplemente lo fijamos a 1 para asegurar que los resultados no cambien.
-RandomForest.fit(x_entren, y_entren)
-predicción_RandomForest = RandomForest.predict(x_prueba)
-precisión_RandomForest = accuracy_score(y_prueba, predicción_RandomForest)
-print("Precisión del Random Forest:")
-print(precisión_RandomForest)
-print("\n")
-print("Reporte del modelo Random Forest:")
-print(classification_report(y_prueba, predicción_RandomForest))
-print("\n")
-print("Comparación de modelos:")
-print("Naive Bayes:", precisión_Naive)
-print("Regresión Logística:", precisión_logistica)
-print("Random Forest:", precisión_RandomForest)
+modelo_rf.fit(X_train, y_train)
+predicción_rf = modelo_rf.predict(X_test)
+precisión_rf = accuracy_score(y_test, predicción_rf)
+print("\nPrecisión del Random Forest:", precisión_rf)
+print("\nReporte Random Forest:")
+print(classification_report(y_test, predicción_rf))
+print("\nComparación general:")
+print("Naive Bayes:", precisión_nb)
+print("Regresión Logística:", precisión_lr)
+print("Random Forest:", precisión_rf)
 #Aquí finalmente comparamos la precisión de los 3 modelos para elegir cuál es el mejor.
-#Observando la precisión de los 3 modelos, creamos una variable llamada mejorModelo 
-#y una serie de ifs para decidir el modelo para nuestras predicciones.
-mejorModelo = modelo_RandomForest
-mejorNombre = "Random Forest"
-if precisión_Naive > precisión_RandomForest and precisión_Naive > precisión_logistica:
-    mejorModelo = modelo_Naive
-    mejorNombre = "Naive Bayes"
-if precisión_logistica > precisión_RandomForest and precisión_logistica > precisión_Naive:
-    mejorModelo = modelo_logistica
-    mejorNombre = "Regresion Logistica"
-    
-print("Mejor modelo (modelo seleccionado):")
-print(mejorNombre)
-print("\n")
-df["predicción_modelo"] = mejorModelo.predict(X)
+
+#Observando la precisión de los 3 modelos, concluimos que random forest es el mejor modelo a utilizar y es el que finalmente ocupamos para nuestra predicción.
+df["predicción_modelo"] = modelo_rf.predict(X)
 #Creamos una nueva columna dentro del dataframe para almacenar los datos de predicción del modelo.
-print("Ejemplo de canciones con prediccion:")
-print(df[["track_name", "artists", "track_genre", "categoría", "predicción_modelo"]].head(20))
+print("\nEjemplo de dataframe con predicciones ya incluidas:", df.head(20))
 
 df_radio = df.sample(700)
 #Aquí creamos un nuevo dataframe para la radio, a partir de 700 canciones aleatorias del dataframe original.
@@ -150,22 +139,27 @@ for i, fila in df_radio.iterrows():
     elif energía >= 0.70 or baile >= 0.70 and positividad <= 0.3:
         horario = "Noche"
     #Aquí finalmente imponemos las reglas de clasificación para el horario en el que se pueden reproducir las canciones de acuerdo a su energía y su bailabilidad.
-    programación.append([horario,nombre,artista,categoría,popularidad,energía,baile,valencia])
+    programación.append(
+        [horario,nombre,artista,duración,categoría,popularidad,energía,baile,positividad]
+    )
     canciones_usadas.append(nombre)
     último_artista = artista
     última_categoría = categoría
     if len(programación) == 360:
         break
-programacionDeRadio = pd.DataFrame(programación,columns=[ "horario","cancion","artista","duración","categoría","popularidad","energia","danceability","positividad"])
+programacionDeRadio = pd.DataFrame(
+    programación,
+    columns=[ "horario","canción","artista","duración","categoría","popularidad","energía","baile","positividad"]
+)
 #Convertimos la lista de canciones seleccionadas para cada horario en un dataframe final y estructurado.
 print("\nProgramación generada para la radio:")
-print(programacionDeRadio)
-print("\nCanciones para la mañana:")
+print("Canciones para la mañana:")
 print(programacionDeRadio[programacionDeRadio["horario"] == "Mañana"].head(10))
 print("\nCanciones para la tarde:")
 print(programacionDeRadio[programacionDeRadio["horario"] == "Tarde"].head(10))
 print("\nCanciones para la noche:")
 print(programacionDeRadio[programacionDeRadio["horario"] == "Noche"].head(10))
-programacionDeRadio.to_csv("programacion_radio.csv", index=False)
+programacionDeRadio.to_csv("programación_radio.csv", index=False)
+print("\nSe guardó el archivo programación_radio.csv")
 #Aquí mostramos las primeras 10 canciones guardadas para cada horario del día, es decir, mañana, tarde y noche.
 #También convertimos la programación en un archivo .csv para que el abuelo de Regina pueda leerlo en excel y utilizar para su estación.
