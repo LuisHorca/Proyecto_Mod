@@ -1,4 +1,4 @@
-# Sistema inteligente para clasificación y programación musical en una estación de radio
+# Clasificación de programa de radio
 
 ## Descripción del proyecto
 
