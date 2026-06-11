@@ -117,7 +117,7 @@ test_size=0.25
 random_state=42
 ```
 
-Esto significa que el 75% de los datos se usó para entrenar el modelo y el 25% restante para probarlo. El valor `random_state=42` se utilizó para que la separación de datos fuera igual cada vez que se ejecuta el código.
+Esto significa que el 80% de los datos se usó para entrenar el modelo y el 20% restante para probarlo. El valor `random_state=42` se utilizó para que la separación de datos fuera igual cada vez que se ejecuta el código.
 
 ## Evaluación
 
