@@ -18,12 +18,12 @@ Desarrollar un sistema básico de clasificación musical que permita organizar c
 
 ## Dataset utilizado
 
-El archivo utilizado fue:
+El archivo utilizado fue el:
 
 ```text
-Spotify.csv
+dataset.csv
 ```
-
+### Archivo el cual fue obtenido de Spotify Tracks Dataset en Kaggle: https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset?utm_source=chatgpt.com
 El dataset contiene canciones con distintas características musicales. Para este proyecto se usaron principalmente las siguientes columnas:
 
 ```text
