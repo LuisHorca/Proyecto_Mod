@@ -75,10 +75,10 @@ print("\nPrecisión Naive Bayes:", precisión_nb)
 print("\nReporte Naive Bayes:")
 print(classification_report(y_test, predicción_nb))
 
-modelo_lr = LogisticRegression(max_iter=1000)
+modelo_lr = LogisticRegression(max_iter=10000)
 modelo_lr.fit(X_train, y_train)
 #Aquí entrenamos un modelo lineal, el cual mide la probabilidad de pertenecer a cada género paraguas.
-#Debido a la cantidad de datos decidimos utilizar max_iter=1000 para asegurar que haya convergencia.
+#Debido a la cantidad de datos decidimos utilizar max_iter=10000 para asegurar que haya convergencia.
 predicción_lr = modelo_lr.predict(X_test)
 precisión_lr = accuracy_score(y_test, predicción_lr)
 print("\nPrecisión Regresión Logística:", precisión_lr)
