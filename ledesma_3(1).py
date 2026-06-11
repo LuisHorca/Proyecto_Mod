@@ -38,22 +38,22 @@ def agrupar_porgenero(genero):
     else:
         return "otro"
 #Esta función de agrupación de géneros la creamos con el propósito de juntar los subgéneros dentro de un género paraguas.
-df["Genero"] = df["track_genre"].apply(agrupar_porgenero)
+df["Género"] = df["track_genre"].apply(agrupar_porgenero)
 #Creamos una nueva columna llamada categoría, la cual contiene el género paraguas de cada canción.
-print("Cantidad de canciones por genero:")
+print("Cantidad de canciones por género:")
 print("\n")
-print(df["Genero"].value_counts())
+print(df["Género"].value_counts())
 
-df = df[df["Genero"] != "otro"]
+df = df[df["Género"] != "otro"]
 #Eliminamos todos las filas que tuvieran como género paraguas otro, ya que es demasiada mezcla entre géneros no importantes para la estación de radio del abuelo.
 #También consideramos importante eliminar estos datos porque pueden presentar demasiado ruido para nuestro modelo.
 print(df.shape)
-print("Clasificacíon final de generos:")
+print("Clasificación final de géneros:")
 print("\n")
-print(df["Genero"].value_counts())
+print(df["Género"].value_counts())
 
 x=df[["popularity","duration_ms","danceability","energy","loudness","speechiness","acousticness","instrumentalness","liveness","valence","tempo"]]
-y=df["Genero"]
+y=df["Género"]
 #Aquí seleccionamos nuestras variables predictoras y nuesta variable objetivo. Seleccionamos 11 variables para predecir el género.
 x_entren, x_prueba, y_entren, y_prueba = train_test_split(x,y,test_size=0.2,random_state=42)
 #Con más de 34000 datos consideramos que una separación de 80% - 20% de los datos para entrenamiento y prueba era suficiente para el modelo.
